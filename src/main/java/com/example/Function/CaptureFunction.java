@@ -1,36 +1,26 @@
 package com.example.Function;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.math.BigInteger;
-import java.text.SimpleDateFormat;
-//import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.util.Units;
-import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-import org.apache.poi.xwpf.usermodel.XWPFRun;
-import org.apache.poi.xwpf.usermodel.XWPFTable;
-import org.apache.poi.xwpf.usermodel.XWPFTableCell;
-import org.apache.poi.xwpf.usermodel.XWPFTableRow;
+import org.apache.poi.xwpf.usermodel.*;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.math.BigInteger;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class CaptureFunction extends ReadExcelFunction {
 
     public static void takeScreenshotAndInsertIntoWord(XWPFDocument document, WebDriver driver, String testSteps,
-            String remarks, boolean appendScreenshot, TestStep result, String status, XWPFTable tableStatus)
-            throws Exception {
+                                                       String remarks, boolean appendScreenshot, TestStep result, String status, XWPFTable tableStatus) {
         // Define directories
         String screenshotDir = "D:/Testing Selenium SSB/Capture/";
-        String wordDocDir = "D:/Testing Selenium SSB/Reports/";
+//        String wordDocDir = "D:/Testing Selenium SSB/Reports/";
 
         // Create folders if they don't exist
         File screenshotFolder = new File(screenshotDir);
@@ -38,10 +28,10 @@ public class CaptureFunction extends ReadExcelFunction {
             screenshotFolder.mkdirs();
         }
 
-        File wordDocFolder = new File(wordDocDir);
-        if (!wordDocFolder.exists()) {
-            wordDocFolder.mkdirs();
-        }
+//        File wordDocFolder = new File(wordDocDir);
+//        if (!wordDocFolder.exists()) {
+//            wordDocFolder.mkdirs();
+//        }
 
         // Capture screenshot
         File screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
@@ -49,7 +39,11 @@ public class CaptureFunction extends ReadExcelFunction {
         File screenshotFile = new File(screenshotDir + "screenshot_" + timestamp + ".png");
 
         // Copy the screenshot to the folder
-        FileUtils.copyFile(screenshot, screenshotFile);
+        try {
+            FileUtils.copyFile(screenshot, screenshotFile);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         // Optionally: Check active Excel row data and perform some action
         // String excelFilePath = "D:/Active Data Selenium/Active Data.xlsx";
@@ -181,8 +175,7 @@ public class CaptureFunction extends ReadExcelFunction {
 
     }
 
-    public static void insertScreenshotandRemarks(XWPFDocument document, File screenshotFile, String testSteps,
-            String remarks, boolean appendScreenshot) throws Exception {
+    public static void insertScreenshotandRemarks(XWPFDocument document, File screenshotFile, String testSteps, String remarks, boolean appendScreenshot) {
         XWPFTable table;
         XWPFTableRow row;
         XWPFTableCell cell;

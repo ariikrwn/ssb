@@ -2,29 +2,29 @@ package com.example.Pages;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 
 public class Base {
 
-    protected static WebDriver driver;
+    protected WebDriver driver;
 
-    public static WebDriver getDriver() {
-        
-            // Set WebDriver system properties from the config file
-            System.setProperty("webdriver.gecko.driver","C://Program Files//Mozilla Firefox//geckodriver.exe");
+    public Base() {
+        System.setProperty("webdriver.gecko.driver", Config.getProperty("webdriver.gecko.driver"));
 
-            // Initialize the WebDriver
-            driver = new FirefoxDriver();
-            driver.manage().window().maximize();
-
-            return driver;
-        
+        // Initialize the WebDriver
+        driver = new FirefoxDriver();
+        driver.manage().window().maximize();
     }
 
-    public static void quitDriver() {
+    public WebDriver getDriver() {
+        return driver;
+    }
+
+    public void quitDriver() {
         if (driver != null) {
             driver.quit();  // Close the browser and end the session
         }
     }
-    
-        
+
+
 }

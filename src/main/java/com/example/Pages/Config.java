@@ -2,6 +2,7 @@ package com.example.Pages;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Properties;
 
 public class Config {
@@ -9,8 +10,10 @@ public class Config {
 
     static {
         try {
+            String rootPath = Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("")).getPath();
+            String appConfigPath = rootPath + "local.properties";
             // Load properties file (you can put the path of your config file here)
-            FileInputStream inputStream = new FileInputStream("config.properties");
+            FileInputStream inputStream = new FileInputStream(appConfigPath);
             properties.load(inputStream);
             inputStream.close();
         } catch (IOException e) {

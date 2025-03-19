@@ -1,7 +1,9 @@
 package com.example.Pages.Capture.vbo;
 
-import java.io.IOException;
-
+import com.example.Pages.ActionCapture;
+import com.example.Pages.Config;
+import com.example.dto.FileRecord;
+import com.example.dto.StatusEnum;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.openqa.selenium.By;
@@ -9,20 +11,15 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import com.example.Function.CaptureFunction;
-import com.example.Function.TestStep;
-import com.example.Pages.ActionCapture;
-import com.example.dto.FileRecord;
-
 public class Login extends ActionCapture {
 
     public Login(WebDriver driver, XWPFDocument document, XWPFTable tableStatus, FileRecord record) {
         super(driver, document, tableStatus, record, "Input username dan password VBO");
     }
 
-    public void execute() throws Exception, IOException, InterruptedException {
-        String username = this.record.username;
-        String password = this.record.password;
+    public void execute(Integer stepNumber) {
+        String username = Config.getProperty("username");
+        String password = Config.getProperty("password");
 
         WebElement uname = driver.findElement(By.id("u"));
         uname.click();
@@ -37,22 +34,21 @@ public class Login extends ActionCapture {
         String enteredPassword = (String) js.executeScript("return arguments[0].value;", pwd);
 
         boolean testPassed = enteredUsername.equals(username) && enteredPassword.equals(password);
-        String status = testPassed ? "Passed" : "Failed";
-        TestStep resultStep = new TestStep(2, this.stepName, testPassed ? "Passed" : "Failed");
+        StatusEnum status = StatusEnum.getValidate(testPassed);
 
         if (testPassed) {
-            CaptureFunction.takeScreenshotAndInsertIntoWord(
-                    document,
-                    driver,
-                    this.stepName,
-                    "Result : Berhasil input username dan password - " + status,
-                    false,
-                    resultStep, status, tableStatus);
+            capture("Result : Berhasil input username dan password - " + status.getMessage());
         }
 
+        render(stepNumber, status);
+
+        doLogin();
+    }
+
+    void doLogin() {
         WebElement buttonLogin = driver.findElement(By.cssSelector(".ant-btn"));
         buttonLogin.click();
-        Thread.sleep(5000);
+        sleep(5000);
 
         WebElement confirmReffNum = null;
 
@@ -68,7 +64,7 @@ public class Login extends ActionCapture {
         if (confirmReffNum != null) {
             // If element is found, it is not null
             confirmReffNum.click();
-            Thread.sleep(5000);
+            sleep(5000);
         }
     }
 
