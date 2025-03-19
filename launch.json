@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+       {
+          "type": "java",
+          "name": "Launch Main",
+          "request": "launch",
+          "mainClass": "com.example.Main", // Replace with your main class
+          "vmArgs": "-cp \"D://Testing Selenium SSB//ssbdemo//libs",
+          "args": "",
+          "env": {},
+          "stopOnEntry": false
+       }
+    ]
+ }
