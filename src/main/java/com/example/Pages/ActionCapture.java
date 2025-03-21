@@ -2,6 +2,8 @@ package com.example.Pages;
 
 import com.example.Pages.Capture.vbo.GetUrl;
 import com.example.Pages.Capture.vbo.Login;
+import com.example.Pages.Capture.vbo.VerifyData;
+import com.example.Pages.Capture.vbo.VerifyKTP;
 import com.example.dto.FileRecord;
 import com.example.dto.ResultCapture;
 import com.example.dto.StatusEnum;
@@ -47,7 +49,9 @@ public abstract class ActionCapture {
     public static void VBO(WebDriver driver, XWPFDocument document, XWPFTable tableStatus, FileRecord record) {
         List<ActionCapture> list = List.of(
             new GetUrl(driver, document, tableStatus, record),
-            new Login(driver, document, tableStatus, record)
+            new Login(driver, document, tableStatus, record),
+            new VerifyData(driver, document, tableStatus, record)
+            //new VerifyKTP(driver, document, tableStatus, record)
         );
         for (int i = 0; i < list.size(); i++) {
             list.get(i).execute(i);
@@ -82,7 +86,7 @@ public abstract class ActionCapture {
         tableStatus.setWidth(10000);
 
         XWPFTableRow row = tableStatus.createRow();
-        setStyledCell(row.getCell(0), String.valueOf(stepNumber), false, "FFFFFF", 1000,
+        setStyledCell(row.getCell(0), String.valueOf(stepNumber + 1), false, "FFFFFF", 1000,
                 ParagraphAlignment.CENTER);
         setStyledCell(row.getCell(1), "  " + stepName, false, "FFFFFF", 7500,
                 ParagraphAlignment.LEFT);
@@ -150,7 +154,6 @@ public abstract class ActionCapture {
     private static void setStyledCell(XWPFTableCell cell, String text, boolean bold, String bgColor, int width, ParagraphAlignment alignment) {
         XWPFParagraph paragraph = cell.getParagraphs().get(0);
         paragraph.setAlignment(alignment);
-
         paragraph.setSpacingAfter(0);
         XWPFRun run = paragraph.createRun();
         run.setText(text);

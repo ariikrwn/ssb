@@ -13,7 +13,7 @@ public class Config {
             String rootPath = Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("")).getPath();
             String appConfigPath = rootPath + "local.properties";
             // Load properties file (you can put the path of your config file here)
-            FileInputStream inputStream = new FileInputStream(appConfigPath);
+            FileInputStream inputStream = new FileInputStream("D://Testing Selenium SSB//ssbdemo//src//main//resources//local.properties");
             properties.load(inputStream);
             inputStream.close();
         } catch (IOException e) {
